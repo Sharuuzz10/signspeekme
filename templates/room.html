@@ -98,6 +98,13 @@
             position: relative;
             aspect-ratio: 16/9;
             border: 2px solid #404040;
+            transition: all 0.3s ease;
+        }
+
+        .video-container.removing {
+            transform: scale(0.8);
+            opacity: 0;
+            pointer-events: none;
         }
 
         .video-element {
@@ -116,10 +123,88 @@
             font-size: 0.9rem;
         }
 
-        .participants-sidebar {
-            width: 300px;
+        .participant-status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .audio-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.3rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .audio-indicator.muted {
+            background: #ea4335;
+        }
+
+        .sidebar {
+            width: 350px;
+            display: flex;
+            flex-direction: column;
             background: #2d2d2d;
             border-left: 1px solid #404040;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            background: #2d2d2d;
+            border-bottom: 1px solid #404040;
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 1rem;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-tab.active {
+            background: #404040;
+            border-bottom: 2px solid #4285f4;
+        }
+
+        .sidebar-tab:hover {
+            background: #404040;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tab-panel {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tab-panel.active {
+            display: flex;
+        }
+
+        /* Participants Panel */
+        .participants-panel {
             padding: 1rem;
             overflow-y: auto;
         }
@@ -131,6 +216,19 @@
             margin-bottom: 0.5rem;
             background: #404040;
             border-radius: 10px;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .participant-item.removing {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .participant-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
         }
 
         .participant-avatar {
@@ -143,6 +241,184 @@
             justify-content: center;
             margin-right: 1rem;
             font-weight: bold;
+        }
+
+        .participant-details {
+            flex: 1;
+        }
+
+        .participant-name-text {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .participant-role {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .participant-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .control-icon {
+            background: #505050;
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+
+        .control-icon:hover {
+            background: #606060;
+        }
+
+        .control-icon.mute {
+            background: #ea4335;
+        }
+
+        .control-icon.mute:hover {
+            background: #d33426;
+        }
+
+        .control-icon.remove {
+            background: #fbbc05;
+        }
+
+        .control-icon.remove:hover {
+            background: #e6a800;
+        }
+
+        /* Chat Panel */
+        .chat-panel {
+            padding: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .chat-message {
+            padding: 0.8rem;
+            border-radius: 10px;
+            max-width: 85%;
+            word-wrap: break-word;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-message.own {
+            background: #4285f4;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-message.other {
+            background: #404040;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-message.system {
+            background: #fbbc05;
+            color: #333;
+            align-self: center;
+            text-align: center;
+            font-style: italic;
+            max-width: 95%;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .message-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            text-align: right;
+            margin-top: 0.3rem;
+        }
+
+        .chat-input-container {
+            padding: 1rem;
+            border-top: 1px solid #404040;
+            background: #2d2d2d;
+        }
+
+        .chat-input-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 20px;
+            background: #404040;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            background: #505050;
+        }
+
+        .chat-send-btn {
+            background: #4285f4;
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .chat-send-btn:hover {
+            background: #3367d6;
+        }
+
+        .chat-send-btn:disabled {
+            background: #404040;
+            cursor: not-allowed;
         }
 
         .controls {
@@ -197,6 +473,19 @@
             margin-right: 0.5rem;
             margin-bottom: 0.5rem;
             font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+
+        .admin-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .admin-btn.danger {
+            background: #ea4335;
+        }
+
+        .admin-btn.danger:hover {
+            background: #d33426;
         }
 
         .user-count {
@@ -243,6 +532,127 @@
             background: rgba(255, 255, 255, 0.9);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             color: #333;
+            animation: slideIn 0.3s ease;
+        }
+
+        .admin-badge {
+            background: #4285f4;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #34a853;
+            margin-right: 5px;
+        }
+
+        .muted-indicator {
+            color: #ea4335;
+        }
+
+        .video-off-indicator {
+            color: #fbbc05;
+        }
+
+        .no-messages {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        .no-video {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2d2d2d;
+            color: #888;
+            font-size: 3rem;
+        }
+
+        /* Modal for remove confirmation */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #2d2d2d;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal h3 {
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .modal p {
+            margin-bottom: 1.5rem;
+            color: #ccc;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .modal-btn.cancel {
+            background: #404040;
+            color: white;
+        }
+
+        .modal-btn.cancel:hover {
+            background: #505050;
+        }
+
+        .modal-btn.confirm {
+            background: #ea4335;
+            color: white;
+        }
+
+        .modal-btn.confirm:hover {
+            background: #d33426;
         }
     </style>
 </head>
@@ -257,9 +667,22 @@
         </div>
         {% endif %}
 
+        <!-- Remove Confirmation Modal -->
+        <div class="modal" id="removeModal">
+            <div class="modal-content">
+                <h3>Remove Participant</h3>
+                <p id="modalMessage">Are you sure you want to remove this participant?</p>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+                    <button class="modal-btn confirm" id="confirmRemove">Remove</button>
+                </div>
+            </div>
+        </div>
+
         <header class="room-header">
             <div class="room-info">
                 <h2>{{ room_name }}</h2>
+                {% if is_admin %}
                 <div class="room-id-container">
                     <div class="room-id" id="room-id" title="Click to copy">
                         Room ID: {{ room_id }}
@@ -268,10 +691,14 @@
                         <i class="fas fa-copy"></i> Copy ID
                     </button>
                 </div>
+                {% endif %}
             </div>
             <div class="user-count">
                 <i class="fas fa-users"></i>
                 <span id="participant-count">{{ participants|length }}</span> participants
+                {% if is_admin %}
+                <span class="admin-badge">Host</span>
+                {% endif %}
             </div>
         </header>
 
@@ -281,49 +708,139 @@
                 <div class="video-container" id="local-video-container">
                     <video id="local-video" class="video-element" autoplay muted></video>
                     <div class="participant-name">{{ user_name }} (You)</div>
+                    <div class="participant-status">
+                        {% if is_admin %}👑 Host{% else %}Member{% endif %}
+                    </div>
+                    <div class="audio-indicator" id="local-audio-indicator">
+                        <i class="fas fa-microphone"></i>
+                    </div>
                 </div>
             </div>
             
-            <div class="participants-sidebar">
-                <h3>Participants ({{ participants|length }})</h3>
-                <div id="participants-list">
-                    {% for participant in participants %}
-                    <div class="participant-item" data-user-id="{{ participant.user_id }}">
-                        <div class="participant-avatar">
-                            {{ participant.name|first|upper }}
+            <div class="sidebar">
+                <div class="sidebar-tabs">
+                    <button class="sidebar-tab active" data-tab="participants">
+                        <i class="fas fa-users"></i>
+                        Participants
+                    </button>
+                    <button class="sidebar-tab" data-tab="chat">
+                        <i class="fas fa-comments"></i>
+                        Chat
+                    </button>
+                </div>
+                
+                <div class="sidebar-content">
+                    <!-- Participants Panel -->
+                    <div class="tab-panel active" id="participants-panel">
+                        <div class="participants-panel">
+                            <div id="participants-list">
+                                {% for participant in participants %}
+                                <div class="participant-item" data-user-id="{{ participant.user_id }}">
+                                    <div class="participant-info">
+                                        <div class="participant-avatar">
+                                            {{ participant.name|first|upper }}
+                                        </div>
+                                        <div class="participant-details">
+                                            <div class="participant-name-text">
+                                                <span class="status-indicator"></span>
+                                                {{ participant.name }}
+                                                {% if participant.user_id == room_creator_id %}
+                                                <span class="admin-badge">Host</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="participant-role">
+                                                {% if not participant.audio_enabled %}
+                                                <span class="muted-indicator">🔇 Muted</span>
+                                                {% endif %}
+                                                {% if not participant.video_enabled %}
+                                                <span class="video-off-indicator">📹 Video off</span>
+                                                {% endif %}
+                                                {% if participant.audio_enabled and participant.video_enabled %}
+                                                <span style="color: #34a853;">● Online</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% if is_admin and participant.user_id != user_id %}
+                                    <div class="participant-controls">
+                                        <button class="control-icon mute" 
+                                                onclick="muteParticipant('{{ participant.user_id }}', '{{ participant.name }}')"
+                                                title="Mute/Unmute">
+                                            <i class="fas fa-volume-mute"></i>
+                                        </button>
+                                        <button class="control-icon remove" 
+                                                onclick="showRemoveModal('{{ participant.user_id }}', '{{ participant.name }}')"
+                                                title="Remove from meeting">
+                                            <i class="fas fa-user-times"></i>
+                                        </button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Invite Section -->
+                            {% if is_admin %}
+                            <div class="invite-section">
+                                <h4>Invite Others</h4>
+                                <div class="invite-link" id="invite-link">
+                                    Room ID: {{ room_id }}
+                                </div>
+                                <p>Share this Room ID with others to join</p>
+                            </div>
+                            
+                            <div class="admin-controls">
+                                <h4>Host Controls</h4>
+                                <button class="admin-btn" onclick="muteAllParticipants()">
+                                    <i class="fas fa-volume-mute"></i> Mute All
+                                </button>
+                                <button class="admin-btn danger" onclick="showRemoveAllModal()">
+                                    <i class="fas fa-user-times"></i> Remove All
+                                </button>
+                            </div>
+                            {% endif %}
                         </div>
-                        <div class="participant-info">
-                            <div class="participant-name">{{ participant.name }}</div>
-                            <div class="participant-status">
-                                {% if participant.is_admin %}(Host){% endif %}
-                                {% if not participant.audio_enabled %}🔇{% endif %}
-                                {% if not participant.video_enabled %}📹 off{% endif %}
+                    </div>
+                    
+                    <!-- Chat Panel -->
+                    <div class="tab-panel" id="chat-panel">
+                        <div class="chat-panel">
+                            <div class="chat-messages" id="chat-messages">
+                                {% for message in chat_messages %}
+                                <div class="chat-message {% if message.user_id == user_id %}own{% elif message.is_system %}system{% else %}other{% endif %}">
+                                    {% if not message.is_system %}
+                                    <div class="message-sender">
+                                        {{ message.user_name }}
+                                        {% if message.user_id == room_creator_id %}
+                                        <span class="admin-badge">Host</span>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                    <div class="message-text">{{ message.message }}</div>
+                                    <div class="message-time">{{ message.timestamp }}</div>
+                                </div>
+                                {% empty %}
+                                <div class="no-messages">
+                                    No messages yet. Start the conversation!
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="chat-input-container">
+                                <form class="chat-input-form" id="chat-form">
+                                    <input type="text" 
+                                           class="chat-input" 
+                                           id="chat-input" 
+                                           placeholder="Type a message..." 
+                                           maxlength="500"
+                                           required>
+                                    <button type="submit" class="chat-send-btn" id="chat-send-btn">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
-                
-                <!-- Invite Section -->
-                <div class="invite-section">
-                    <h4>Invite Others</h4>
-                    <div class="invite-link" id="invite-link">
-                        Room ID: {{ room_id }}
-                    </div>
-                    <p>Share this Room ID with others to join</p>
-                </div>
-                
-                {% if is_admin %}
-                <div class="admin-controls">
-                    <h4>Host Controls</h4>
-                    <button class="admin-btn" onclick="muteAll()">
-                        <i class="fas fa-volume-mute"></i> Mute All
-                    </button>
-                    <button class="admin-btn" onclick="removeAll()">
-                        <i class="fas fa-user-times"></i> Remove All
-                    </button>
-                </div>
-                {% endif %}
             </div>
         </div>
 
@@ -343,18 +860,176 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.4.7/peerjs.min.js"></script>
     <script>
         const roomId = '{{ room_id }}';
         const userId = '{{ user_id }}';
         const userName = '{{ user_name }}';
         const isAdmin = {{ is_admin|yesno:"true,false" }};
+        const roomCreatorId = '{{ room_creator_id }}';
+
+        // PeerJS for real-time communication
+        let peer;
+        let peers = {};
+        let localStream;
+        let screenStream;
+
+        // Modal state
+        let currentRemoveUserId = null;
+        let currentRemoveUserName = null;
+
+        // Initialize PeerJS
+        async function initializePeer() {
+            peer = new Peer(userId, {
+                host: '0.peerjs.com',
+                port: 443,
+                path: '/',
+                secure: true
+            });
+
+            peer.on('open', (id) => {
+                console.log('My peer ID is: ' + id);
+                initializeMedia();
+            });
+
+            peer.on('call', (call) => {
+                // Answer the call with our local stream
+                call.answer(localStream);
+                
+                call.on('stream', (remoteStream) => {
+                    // Display the remote stream
+                    addVideoStream(call.peer, remoteStream, call.metadata.userName);
+                });
+            });
+
+            peer.on('error', (err) => {
+                console.error('PeerJS error:', err);
+            });
+        }
+
+        // Initialize media devices
+        async function initializeMedia() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                });
+                
+                const localVideo = document.getElementById('local-video');
+                localVideo.srcObject = localStream;
+                
+                // Update audio indicator
+                updateAudioIndicator(true);
+                
+                // Call existing participants
+                callExistingParticipants();
+                
+            } catch (error) {
+                console.error('Error accessing media devices:', error);
+                showNoVideoPlaceholder('local-video-container', userName);
+            }
+        }
+
+        // Call existing participants
+        function callExistingParticipants() {
+            // This would typically call other participants in the room
+            // For now, we'll simulate this with the current implementation
+            console.log('Calling existing participants...');
+        }
+
+        // Add video stream to grid
+        function addVideoStream(userId, stream, userName) {
+            // Remove existing video if present
+            const existingVideo = document.querySelector(`[data-user-id="${userId}"]`);
+            if (existingVideo) {
+                existingVideo.remove();
+            }
+            
+            const videoGrid = document.getElementById('video-grid');
+            const videoContainer = document.createElement('div');
+            videoContainer.className = 'video-container';
+            videoContainer.setAttribute('data-user-id', userId);
+            
+            const videoElement = document.createElement('video');
+            videoElement.className = 'video-element';
+            videoElement.srcObject = stream;
+            videoElement.playsInline = true;
+            videoElement.autoplay = true;
+            videoElement.muted = userId === peer.id;
+            
+            const nameLabel = document.createElement('div');
+            nameLabel.className = 'participant-name';
+            nameLabel.textContent = userName;
+            
+            const statusLabel = document.createElement('div');
+            statusLabel.className = 'participant-status';
+            statusLabel.textContent = userId === roomCreatorId ? '👑 Host' : 'Member';
+            
+            const audioIndicator = document.createElement('div');
+            audioIndicator.className = 'audio-indicator';
+            audioIndicator.innerHTML = '<i class="fas fa-microphone"></i>';
+            
+            videoContainer.appendChild(videoElement);
+            videoContainer.appendChild(nameLabel);
+            videoContainer.appendChild(statusLabel);
+            videoContainer.appendChild(audioIndicator);
+            videoGrid.appendChild(videoContainer);
+        }
+
+        // Show no video placeholder
+        function showNoVideoPlaceholder(containerId, userName) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div class="no-video">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="participant-name">${userName} (You)</div>
+                <div class="participant-status">
+                    ${is_admin ? '👑 Host' : 'Member'}
+                </div>
+                <div class="audio-indicator" id="local-audio-indicator">
+                    <i class="fas fa-microphone"></i>
+                </div>
+            `;
+        }
+
+        // Update audio indicator
+        function updateAudioIndicator(enabled) {
+            const indicator = document.getElementById('local-audio-indicator');
+            if (enabled) {
+                indicator.innerHTML = '<i class="fas fa-microphone"></i>';
+                indicator.classList.remove('muted');
+            } else {
+                indicator.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                indicator.classList.add('muted');
+            }
+        }
+
+        // Modal functions
+        function showRemoveModal(userId, userName) {
+            currentRemoveUserId = userId;
+            currentRemoveUserName = userName;
+            document.getElementById('modalMessage').textContent = `Are you sure you want to remove ${userName} from the meeting?`;
+            document.getElementById('removeModal').style.display = 'flex';
+        }
+
+        function showRemoveAllModal() {
+            currentRemoveUserId = 'all';
+            document.getElementById('modalMessage').textContent = 'Are you sure you want to remove all participants from the meeting?';
+            document.getElementById('removeModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('removeModal').style.display = 'none';
+            currentRemoveUserId = null;
+            currentRemoveUserName = null;
+        }
 
         // Copy Room ID functionality
         function copyRoomId() {
             const roomIdText = '{{ room_id }}';
             
             navigator.clipboard.writeText(roomIdText).then(function() {
-                // Show copied feedback
                 const roomIdElement = document.getElementById('room-id');
                 const originalText = roomIdElement.textContent;
                 roomIdElement.textContent = 'Copied!';
@@ -370,31 +1045,113 @@
             });
         }
 
-        // Basic room functionality
-        let localStream;
+        // Tab switching functionality
+        document.querySelectorAll('.sidebar-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+                document.getElementById(`${tabName}-panel`).classList.add('active');
+            });
+        });
 
-        async function initMedia() {
+        // Chat functionality
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addMessageToChat(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${message.user_id === userId ? 'own' : message.is_system ? 'system' : 'other'}`;
+            
+            let messageHtml = '';
+            if (!message.is_system) {
+                messageHtml += `<div class="message-sender">${message.user_name}`;
+                if (message.user_id === roomCreatorId) {
+                    messageHtml += `<span class="admin-badge">Host</span>`;
+                }
+                messageHtml += `</div>`;
+            }
+            messageHtml += `<div class="message-text">${message.message}</div>`;
+            messageHtml += `<div class="message-time">${message.timestamp}</div>`;
+            
+            messageDiv.innerHTML = messageHtml;
+            chatMessages.appendChild(messageDiv);
+            
+            const noMessages = chatMessages.querySelector('.no-messages');
+            if (noMessages) {
+                noMessages.remove();
+            }
+            
+            scrollToBottom();
+        }
+
+        async function sendMessage(messageText) {
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    audio: true
+                const formData = new FormData();
+                formData.append('message', messageText);
+                
+                const response = await fetch(`/api/room/${roomId}/chat/send/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: formData
                 });
                 
-                const localVideo = document.getElementById('local-video');
-                localVideo.srcObject = localStream;
-                
+                const data = await response.json();
+                if (data.success) {
+                    addMessageToChat(data.message);
+                }
             } catch (error) {
-                console.error('Error accessing media devices:', error);
-                alert('Unable to access camera and microphone. Please check your permissions.');
+                console.error('Error sending message:', error);
             }
         }
 
-        function leaveRoom() {
-            if (localStream) {
-                localStream.getTracks().forEach(track => track.stop());
+        async function loadMessages() {
+            try {
+                const response = await fetch(`/api/room/${roomId}/chat/messages/`);
+                const data = await response.json();
+                
+                chatMessages.innerHTML = '';
+                
+                if (data.messages.length === 0) {
+                    chatMessages.innerHTML = '<div class="no-messages">No messages yet. Start the conversation!</div>';
+                } else {
+                    data.messages.forEach(message => {
+                        addMessageToChat(message);
+                    });
+                }
+                
+                scrollToBottom();
+            } catch (error) {
+                console.error('Error loading messages:', error);
             }
-            window.location.href = `/room/${roomId}/leave/`;
         }
+
+        // Chat form submission
+        chatForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const messageText = chatInput.value.trim();
+            if (messageText) {
+                chatInput.disabled = true;
+                await sendMessage(messageText);
+                chatInput.value = '';
+                chatInput.disabled = false;
+                chatInput.focus();
+            }
+        });
+
+        // Auto-refresh chat every 3 seconds
+        setInterval(loadMessages, 3000);
 
         // Control functions
         document.getElementById('toggle-video').addEventListener('click', function() {
@@ -415,28 +1172,156 @@
                     audioTrack.enabled = !audioTrack.enabled;
                     this.style.background = audioTrack.enabled ? '#404040' : '#ea4335';
                     this.innerHTML = audioTrack.enabled ? '<i class="fas fa-microphone"></i>' : '<i class="fas fa-microphone-slash"></i>';
+                    updateAudioIndicator(audioTrack.enabled);
                 }
             }
         });
 
-        // Admin functions
-        function muteAll() {
+        // Admin control functions
+        async function muteParticipant(targetUserId, targetUserName) {
             if (!isAdmin) return;
-            alert('Mute all functionality would be implemented here');
+            
+            try {
+                const response = await fetch(`/api/room/${roomId}/mute/${targetUserId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    }
+                });
+                
+                if (response.ok) {
+                    // Show animation and reload
+                    const participantItem = document.querySelector(`[data-user-id="${targetUserId}"]`);
+                    if (participantItem) {
+                        participantItem.classList.add('removing');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 300);
+                    } else {
+                        location.reload();
+                    }
+                }
+            } catch (error) {
+                console.error('Error muting participant:', error);
+            }
         }
 
-        function removeAll() {
+        async function removeParticipant(targetUserId) {
             if (!isAdmin) return;
-            if (confirm('Remove all participants from the meeting?')) {
-                alert('Remove all functionality would be implemented here');
+            
+            try {
+                const response = await fetch(`/api/room/${roomId}/remove/${targetUserId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    }
+                });
+                
+                if (response.ok) {
+                    // Show removal animation
+                    const videoContainer = document.querySelector(`.video-container[data-user-id="${targetUserId}"]`);
+                    const participantItem = document.querySelector(`.participant-item[data-user-id="${targetUserId}"]`);
+                    
+                    if (videoContainer) videoContainer.classList.add('removing');
+                    if (participantItem) participantItem.classList.add('removing');
+                    
+                    setTimeout(() => {
+                        location.reload();
+                    }, 300);
+                }
+            } catch (error) {
+                console.error('Error removing participant:', error);
             }
+        }
+
+        async function muteAllParticipants() {
+            if (!isAdmin) return;
+            
+            try {
+                const response = await fetch(`/api/room/${roomId}/mute-all/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    }
+                });
+                
+                if (response.ok) {
+                    location.reload();
+                }
+            } catch (error) {
+                console.error('Error muting all participants:', error);
+            }
+        }
+
+        async function removeAllParticipants() {
+            if (!isAdmin) return;
+            
+            try {
+                const response = await fetch(`/api/room/${roomId}/remove-all/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    }
+                });
+                
+                if (response.ok) {
+                    // Show removal animations for all non-admin participants
+                    const allParticipants = document.querySelectorAll('.participant-item:not([data-user-id="' + userId + '"])');
+                    const allVideos = document.querySelectorAll('.video-container:not([data-user-id="' + userId + '"])');
+                    
+                    allParticipants.forEach(item => item.classList.add('removing'));
+                    allVideos.forEach(container => container.classList.add('removing'));
+                    
+                    setTimeout(() => {
+                        location.reload();
+                    }, 300);
+                }
+            } catch (error) {
+                console.error('Error removing all participants:', error);
+            }
+        }
+
+        // Handle modal confirmation
+        document.getElementById('confirmRemove').addEventListener('click', function() {
+            if (currentRemoveUserId === 'all') {
+                removeAllParticipants();
+            } else if (currentRemoveUserId) {
+                removeParticipant(currentRemoveUserId);
+            }
+            closeModal();
+        });
+
+        function leaveRoom() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
+            if (screenStream) {
+                screenStream.getTracks().forEach(track => track.stop());
+            }
+            window.location.href = `/room/${roomId}/leave/`;
+        }
+
+        // Utility function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            initMedia();
+            initializePeer();
+            loadMessages();
             
-            // Update participant count
             function updateParticipantCount() {
                 const count = document.querySelectorAll('.participant-item').length;
                 document.getElementById('participant-count').textContent = count;
