@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ room_name }} - MeetClone</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            color: white;
+            overflow: hidden;
+        }
+
+        .room-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .room-header {
+            background: #2d2d2d;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #404040;
+        }
+
+        .room-info h2 {
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .room-id-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .room-id {
+            background: #404040;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .room-id:hover {
+            background: #505050;
+        }
+
+        .copy-btn {
+            background: #4285f4;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #3367d6;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .video-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            align-content: start;
+            overflow-y: auto;
+        }
+
+        .video-container {
+            background: #2d2d2d;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 16/9;
+            border: 2px solid #404040;
+        }
+
+        .video-element {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .participant-name {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .participants-sidebar {
+            width: 300px;
+            background: #2d2d2d;
+            border-left: 1px solid #404040;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .participant-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            background: #404040;
+            border-radius: 10px;
+        }
+
+        .participant-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: bold;
+        }
+
+        .controls {
+            background: #2d2d2d;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            border-top: 1px solid #404040;
+        }
+
+        .control-btn {
+            background: #404040;
+            border: none;
+            color: white;
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            background: #555;
+        }
+
+        .control-btn.leave {
+            background: #ea4335;
+        }
+
+        .control-btn.leave:hover {
+            background: #d33426;
+        }
+
+        .admin-controls {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #404040;
+        }
+
+        .admin-btn {
+            background: #667eea;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .user-count {
+            background: #404040;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .invite-section {
+            background: #404040;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .invite-section h4 {
+            margin-bottom: 0.5rem;
+            color: #4285f4;
+        }
+
+        .invite-link {
+            background: #2d2d2d;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            margin-bottom: 0.5rem;
+        }
+
+        .messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .alert {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="room-container">
+        <!-- Flash Messages -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <header class="room-header">
+            <div class="room-info">
+                <h2>{{ room_name }}</h2>
+                <div class="room-id-container">
+                    <div class="room-id" id="room-id" title="Click to copy">
+                        Room ID: {{ room_id }}
+                    </div>
+                    <button class="copy-btn" onclick="copyRoomId()">
+                        <i class="fas fa-copy"></i> Copy ID
+                    </button>
+                </div>
+            </div>
+            <div class="user-count">
+                <i class="fas fa-users"></i>
+                <span id="participant-count">{{ participants|length }}</span> participants
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="video-grid" id="video-grid">
+                <!-- Video elements will be added here dynamically -->
+                <div class="video-container" id="local-video-container">
+                    <video id="local-video" class="video-element" autoplay muted></video>
+                    <div class="participant-name">{{ user_name }} (You)</div>
+                </div>
+            </div>
+            
+            <div class="participants-sidebar">
+                <h3>Participants ({{ participants|length }})</h3>
+                <div id="participants-list">
+                    {% for participant in participants %}
+                    <div class="participant-item" data-user-id="{{ participant.user_id }}">
+                        <div class="participant-avatar">
+                            {{ participant.name|first|upper }}
+                        </div>
+                        <div class="participant-info">
+                            <div class="participant-name">{{ participant.name }}</div>
+                            <div class="participant-status">
+                                {% if participant.is_admin %}(Host){% endif %}
+                                {% if not participant.audio_enabled %}🔇{% endif %}
+                                {% if not participant.video_enabled %}📹 off{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Invite Section -->
+                <div class="invite-section">
+                    <h4>Invite Others</h4>
+                    <div class="invite-link" id="invite-link">
+                        Room ID: {{ room_id }}
+                    </div>
+                    <p>Share this Room ID with others to join</p>
+                </div>
+                
+                {% if is_admin %}
+                <div class="admin-controls">
+                    <h4>Host Controls</h4>
+                    <button class="admin-btn" onclick="muteAll()">
+                        <i class="fas fa-volume-mute"></i> Mute All
+                    </button>
+                    <button class="admin-btn" onclick="removeAll()">
+                        <i class="fas fa-user-times"></i> Remove All
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" id="toggle-video">
+                <i class="fas fa-video"></i>
+            </button>
+            <button class="control-btn" id="toggle-audio">
+                <i class="fas fa-microphone"></i>
+            </button>
+            <button class="control-btn" id="screen-share">
+                <i class="fas fa-desktop"></i>
+            </button>
+            <button class="control-btn leave" onclick="leaveRoom()">
+                <i class="fas fa-phone-slash"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const roomId = '{{ room_id }}';
+        const userId = '{{ user_id }}';
+        const userName = '{{ user_name }}';
+        const isAdmin = {{ is_admin|yesno:"true,false" }};
+
+        // Copy Room ID functionality
+        function copyRoomId() {
+            const roomIdText = '{{ room_id }}';
+            
+            navigator.clipboard.writeText(roomIdText).then(function() {
+                // Show copied feedback
+                const roomIdElement = document.getElementById('room-id');
+                const originalText = roomIdElement.textContent;
+                roomIdElement.textContent = 'Copied!';
+                roomIdElement.style.background = '#4285f4';
+                
+                setTimeout(function() {
+                    roomIdElement.textContent = originalText;
+                    roomIdElement.style.background = '#404040';
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy room ID. Please copy manually: ' + roomIdText);
+            });
+        }
+
+        // Basic room functionality
+        let localStream;
+
+        async function initMedia() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                });
+                
+                const localVideo = document.getElementById('local-video');
+                localVideo.srcObject = localStream;
+                
+            } catch (error) {
+                console.error('Error accessing media devices:', error);
+                alert('Unable to access camera and microphone. Please check your permissions.');
+            }
+        }
+
+        function leaveRoom() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
+            window.location.href = `/room/${roomId}/leave/`;
+        }
+
+        // Control functions
+        document.getElementById('toggle-video').addEventListener('click', function() {
+            if (localStream) {
+                const videoTrack = localStream.getVideoTracks()[0];
+                if (videoTrack) {
+                    videoTrack.enabled = !videoTrack.enabled;
+                    this.style.background = videoTrack.enabled ? '#404040' : '#ea4335';
+                    this.innerHTML = videoTrack.enabled ? '<i class="fas fa-video"></i>' : '<i class="fas fa-video-slash"></i>';
+                }
+            }
+        });
+
+        document.getElementById('toggle-audio').addEventListener('click', function() {
+            if (localStream) {
+                const audioTrack = localStream.getAudioTracks()[0];
+                if (audioTrack) {
+                    audioTrack.enabled = !audioTrack.enabled;
+                    this.style.background = audioTrack.enabled ? '#404040' : '#ea4335';
+                    this.innerHTML = audioTrack.enabled ? '<i class="fas fa-microphone"></i>' : '<i class="fas fa-microphone-slash"></i>';
+                }
+            }
+        });
+
+        // Admin functions
+        function muteAll() {
+            if (!isAdmin) return;
+            alert('Mute all functionality would be implemented here');
+        }
+
+        function removeAll() {
+            if (!isAdmin) return;
+            if (confirm('Remove all participants from the meeting?')) {
+                alert('Remove all functionality would be implemented here');
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initMedia();
+            
+            // Update participant count
+            function updateParticipantCount() {
+                const count = document.querySelectorAll('.participant-item').length;
+                document.getElementById('participant-count').textContent = count;
+            }
+            
+            updateParticipantCount();
+            
+            // Auto-hide messages after 5 seconds
+            setTimeout(function() {
+                const messages = document.querySelector('.messages');
+                if (messages) {
+                    messages.style.transition = 'opacity 0.5s';
+                    messages.style.opacity = '0';
+                    setTimeout(() => messages.remove(), 500);
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

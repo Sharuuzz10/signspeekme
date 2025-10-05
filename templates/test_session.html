@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Session</title>
+</head>
+<body>
+    <h1>Session Test</h1>
+    <p>Test Name: {{ test_name }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Enter name">
+        <button type="submit">Set Session</button>
+    </form>
+</body>
+</html>
